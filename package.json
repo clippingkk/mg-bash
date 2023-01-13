@@ -1,0 +1,24 @@
+{
+  "name": "mg-bash",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc index.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "blurhash": "^2.0.4",
+    "dotenv": "^16.0.3",
+    "pg": "^8.8.0",
+    "sharp": "^0.31.3"
+  },
+  "devDependencies": {
+    "@types/pg": "^8.6.6",
+    "@types/sharp": "^0.31.1",
+    "typescript": "^4.9.4"
+  }
+}
