@@ -78,7 +78,7 @@ async function main() {
 		for (let chunk of chunks) {
 			const img = await fetchImage(chunk.image).then(res => res.blob()).then(res=>res.arrayBuffer())
 			const imgUint8 = new Uint8Array(img)
-			const { data, info } = await sharp(imgUint8).raw().toBuffer({ resolveWithObject: true })
+			const { data, info } = await sharp(imgUint8).ensureAlpha().raw().toBuffer({ resolveWithObject: true })
 			const buf = Uint8ClampedArray.from(data)
 			try {
 				const blurResult = encode(buf, info.width ?? 100, info.height ?? 100, 1, 1)
