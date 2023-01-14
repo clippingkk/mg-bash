@@ -2,23 +2,30 @@
   "name": "mg-bash",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "type": "module",
   "scripts": {
-    "build": "tsc index.ts",
+    "build": "tsc",
+    "db:pull": "prisma db pull",
+    "db:gen": "prisma generate",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@prisma/client": "^4.8.1",
     "blurhash": "^2.0.4",
     "dotenv": "^16.0.3",
     "pg": "^8.8.0",
+    "pino": "^8.8.0",
     "sharp": "^0.31.3"
   },
   "devDependencies": {
+    "@types/node": "^18.11.18",
     "@types/pg": "^8.6.6",
     "@types/sharp": "^0.31.1",
+    "prisma": "^4.8.1",
+    "ts-node": "^10.9.1",
     "typescript": "^4.9.4"
   }
 }

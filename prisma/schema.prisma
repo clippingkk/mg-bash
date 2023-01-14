@@ -1,0 +1,54 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model book_tsv {
+  id                Int
+  title_author_tags Unsupported("tsvector")?
+
+  @@index([title_author_tags], map: "book_tsv_zh", type: Gin)
+  @@ignore
+}
+
+model image_infos {
+  id              BigInt      @id @default(autoincrement())
+  blur_hash_value String      @default("") @db.VarChar
+  height          BigInt      @default(0)
+  width           BigInt      @default(0)
+  ratio           Float       @default(0)
+  book_image_info BigInt?     @unique
+  wenqu_book      wenqu_book? @relation(fields: [book_image_info], references: [id], onUpdate: NoAction, map: "image_infos_wenqu_book_imageInfo")
+}
+
+model wenqu_book {
+  id           BigInt       @id @default(autoincrement())
+  rating       Float
+  author       String       @db.VarChar
+  pubdate      DateTime     @db.Timestamptz(6)
+  translator   String       @default("") @db.VarChar
+  producer     String       @default("") @db.VarChar
+  total_pages  Int          @default(0) @db.SmallInt
+  series       String       @default("") @db.VarChar
+  origin_title String       @db.VarChar
+  image        String       @db.VarChar
+  douban_id    BigInt       @unique(map: "book_douban_id")
+  title        String       @db.VarChar
+  url          String       @db.VarChar
+  press        String       @default("") @db.VarChar
+  isbn         String       @unique(map: "book_isbn") @db.VarChar
+  tags         Json
+  author_intro String
+  summary      String
+  catalog      String       @default("")
+  created_at   DateTime     @db.Timestamptz(6)
+  updated_at   DateTime     @db.Timestamptz(6)
+  deleted_at   DateTime?    @db.Timestamptz(6)
+  raw          String
+  image_infos  image_infos?
+}
