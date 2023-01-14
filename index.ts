@@ -55,6 +55,8 @@ function fetchImage(urlPath: string) {
 		reqUrl = `${CDN_HOST}/${reqUrl}`
 	}
 
+	logger.info('request url: ', reqUrl)
+
 	return fetch(reqUrl)
 }
 
@@ -78,14 +80,19 @@ async function main() {
 			const imgUint8 = new Uint8Array(img)
 			const { data, info } = await sharp(imgUint8).raw().toBuffer({ resolveWithObject: true })
 			const buf = Uint8ClampedArray.from(data)
-			const blurResult = encode(buf, info.width ?? 100, info.height ?? 100, 1, 1)
-			imageInfoList.push({
-				book_image_info: BigInt(chunk.id),
-				height: BigInt(info.height),
-				width: BigInt(info.width),
-				ratio: info.width / info.height,
-				blur_hash_value: blurResult,
-			})
+			try {
+				const blurResult = encode(buf, info.width ?? 100, info.height ?? 100, 1, 1)
+				imageInfoList.push({
+					book_image_info: BigInt(chunk.id),
+					height: BigInt(info.height),
+					width: BigInt(info.width),
+					ratio: info.width / info.height,
+					blur_hash_value: blurResult,
+				})
+			} catch (e) {
+				logger.error(e)
+
+			}
 		}
 		await saveImageInfo(imageInfoList)
 		imageInfoList = []
