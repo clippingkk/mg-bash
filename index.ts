@@ -55,7 +55,7 @@ function fetchImage(urlPath: string) {
 		reqUrl = `${CDN_HOST}/${reqUrl}`
 	}
 
-	logger.info('request url: ', reqUrl)
+	logger.info('request url: ' + reqUrl)
 
 	return fetch(reqUrl)
 }
