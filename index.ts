@@ -65,7 +65,7 @@ async function main() {
 
 	// sql select rows that do not exist in image info table
 	let nextChunkSize = CHUNK_SIZE
-	let lastId = 1<<29
+	let lastId = 1 << 29
 	while (true) {
 		logger.info('will going to next: ' + lastId)
 		const chunks = await getChunks(pgClient, lastId, nextChunkSize)
@@ -76,11 +76,11 @@ async function main() {
 		let imageInfoList: Omit<image_infos, 'id'>[] = []
 
 		for (let chunk of chunks) {
-			const img = await fetchImage(chunk.image).then(res => res.blob()).then(res=>res.arrayBuffer())
-			const imgUint8 = new Uint8Array(img)
-			const { data, info } = await sharp(imgUint8).ensureAlpha().raw().toBuffer({ resolveWithObject: true })
-			const buf = Uint8ClampedArray.from(data)
 			try {
+				const img = await fetchImage(chunk.image).then(res => res.blob()).then(res => res.arrayBuffer())
+				const imgUint8 = new Uint8Array(img)
+				const { data, info } = await sharp(imgUint8).ensureAlpha().raw().toBuffer({ resolveWithObject: true })
+				const buf = Uint8ClampedArray.from(data)
 				const blurResult = encode(buf, info.width ?? 100, info.height ?? 100, 1, 1)
 				imageInfoList.push({
 					book_image_info: BigInt(chunk.id),
@@ -91,7 +91,6 @@ async function main() {
 				})
 			} catch (e) {
 				logger.error(e)
-
 			}
 		}
 		await saveImageInfo(imageInfoList)
